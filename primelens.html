@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prime lens | Photography by R. Miller Hanniel</title>
+
+  <!-- Google Fonts: Playfair Display, Cinzel & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            drak: {
+              950: '#070709',
+              900: '#0c0c10',
+              850: '#111116',
+              800: '#181820',
+              700: '#23232f',
+            },
+            gold: {
+              300: '#f9e7a2',
+              400: '#f3d36b',
+              500: '#d4af37',
+              600: '#b58e26',
+              700: '#8e6c19',
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            serif: ['Playfair Display', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0c0c10;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #23232f;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d4af37;
+    }
+
+    /* Glassmorphism styling */
+    .glass-panel {
+      background: rgba(18, 18, 24, 0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+    .glass-input {
+      background: rgba(8, 8, 12, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .glass-input:focus {
+      border-color: #d4af37;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+    }
+
+    /* Shimmer gradient on hero text */
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #ffffff 10%, #f9e7a2 50%, #d4af37 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Gatekeeper blur backdrop */
+    .locked-site {
+      filter: blur(14px) brightness(0.35);
+      pointer-events: none;
+      user-select: none;
+      overflow: hidden;
+      max-height: 100vh;
+    }
+  </style>
+</head>
+<body class="bg-[#070709] text-zinc-100 font-sans selection:bg-[#d4af37] selection:text-black antialiased relative min-h-screen flex flex-col overflow-x-hidden">
+
+  <!-- ======================================================== -->
+  <!-- 🔒 MANDATORY ENTRANCE GATEKEEPER MODAL (SIGNUP / LOGIN FIRST) -->
+  <!-- ======================================================== -->
+  <div id="access-gate" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl transition-all duration-700">
+    <div class="relative w-full max-w-lg rounded-3xl glass-panel p-6 sm:p-10 shadow-[0_0_80px_rgba(0,0,0,0.9)] border border-gold-500/30 overflow-hidden">
+      
+      <!-- Top Decorative Accent -->
+      <div class="absolute -top-24 -left-24 w-48 h-48 bg-gold-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-amber-600/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Header / Brand Icon -->
+      <div class="text-center space-y-3 mb-8 relative z-10">
+        <div id="gate-logo-container" class="w-16 h-16 mx-auto rounded-full bg-gradient-to-tr from-[#171720] via-[#242430] to-[#0d0d12] border border-gold-500/50 flex items-center justify-center p-3 shadow-xl shadow-gold-500/10 overflow-hidden">
+          <!-- Populated dynamically via LOGO_CONFIG -->
+          <svg viewBox="0 0 40 40" class="w-full h-full text-gold-500" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="20" cy="20" r="7" stroke="#f3d36b" stroke-width="1.5" />
+            <path d="M20 3v5M20 32v5M3 20h5M32 20h5M8 8l3.6 3.6M28.4 28.4l3.6 3.6M8 32l3.6-3.6M28.4 11.6l3.6-3.6" />
+            <circle cx="20" cy="20" r="2" fill="#d4af37" />
+          </svg>
+        </div>
+        
+        <div>
+          <h2 id="gate-brand-name" class="font-cinzel text-xl sm:text-2xl font-bold tracking-[0.2em] text-white uppercase">PRIME LENS</h2>
+          <p id="gate-brand-sub" class="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-gold-400 font-medium mt-1">Private Photography Portfolio • R. Miller Hanniel</p>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-gold-500/10 border border-gold-500/20 text-xs text-gold-200">
+          ✨ <strong>Please sign up or log in</strong> to access and explore the full photography archive.
+        </div>
+      </div>
+
+      <!-- Tab Switcher (Sign Up / Log In) -->
+      <div class="grid grid-cols-2 rounded-xl bg-black/50 p-1 mb-6 border border-white/10 text-xs uppercase tracking-wider font-semibold">
+        <button id="gate-tab-signup" onclick="switchGateTab('signup')" class="py-2.5 rounded-lg bg-gold-500 text-black shadow-md transition-all">
+          Sign Up
+        </button>
+        <button id="gate-tab-login" onclick="switchGateTab('login')" class="py-2.5 rounded-lg text-zinc-400 hover:text-white transition-all">
+          Log In
+        </button>
+      </div>
+
+      <!-- Error / Success Alert Messages -->
+      <div id="gate-error" class="hidden mb-4 p-3 rounded-xl bg-red-500/15 border border-red-500/30 text-xs text-red-300 flex items-center gap-2">
+        <svg class="w-4 h-4 text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01"/></svg>
+        <span id="gate-error-text">Please fill out all fields.</span>
+      </div>
+
+      <div id="gate-success" class="hidden mb-4 p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-xs text-emerald-300 flex items-center gap-2">
+        <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        <span id="gate-success-text">Welcome! Unlocking gallery...</span>
+      </div>
+
+      <!-- 1. SIGNUP FORM (Gathers user information) -->
+      <form id="gate-form-signup" onsubmit="handleGateSignup(event)" class="space-y-4">
+        <div>
+          <label class="block text-[11px] uppercase tracking-wider text-zinc-300 mb-1 font-medium">Full Name *</label>
+          <input type="text" id="gate-signup-name" required placeholder="e.g. David Sterling" class="w-full px-4 py-2.5 rounded-xl glass-input text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-[11px] uppercase tracking-wider text-zinc-300 mb-1 font-medium">Email Address *</label>
+          <input type="email" id="gate-signup-email" required placeholder="e.g. david@sterling.com" class="w-full px-4 py-2.5 rounded-xl glass-input text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-[11px] uppercase tracking-wider text-zinc-300 mb-1 font-medium">Primary Photography Interest *</label>
+          <select id="gate-signup-interest" required class="w-full px-4 py-2.5 rounded-xl bg-[#181822] border border-white/15 text-xs sm:text-sm text-white focus:outline-none focus:border-gold-500">
+            <option value="Nature & Landscapes">Nature & Landscapes</option>
+            <option value="Wildlife">Wildlife</option>
+            <option value="Portrait Photography">Portrait Photography</option>
+            <option value="Street Photography">Street Photography</option>
+            <option value="Travel Photography">Travel Photography</option>
+            <option value="Macro & Creative">Macro & Creative</option>
+            <option value="Architecture">Architecture</option>
+            <option value="Black and White">Black and White</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-[11px] uppercase tracking-wider text-zinc-300 mb-1 font-medium">Create Password *</label>
+          <input type="password" id="gate-signup-password" required minlength="4" placeholder="Minimum 4 characters" class="w-full px-4 py-2.5 rounded-xl glass-input text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none">
+        </div>
+
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 text-black font-semibold text-xs uppercase tracking-[0.2em] shadow-lg hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] hover:scale-[1.01] active:scale-[0.99] transition-all">
+          Register & Enter Portfolio
+        </button>
+      </form>
+
+      <!-- 2. LOGIN FORM -->
+      <form id="gate-form-login" onsubmit="handleGateLogin(event)" class="space-y-4 hidden">
+        <div>
+          <label class="block text-[11px] uppercase tracking-wider text-zinc-300 mb-1 font-medium">Email Address</label>
+          <input type="email" id="gate-login-email" required placeholder="name@domain.com" class="w-full px-4 py-2.5 rounded-xl glass-input text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-[11px] uppercase tracking-wider text-zinc-300 mb-1 font-medium">Password</label>
+          <input type="password" id="gate-login-password" required placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl glass-input text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none">
+        </div>
+
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 text-black font-semibold text-xs uppercase tracking-[0.2em] shadow-lg hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] hover:scale-[1.01] active:scale-[0.99] transition-all">
+          Log In & Enter Portfolio
+        </button>
+      </form>
+
+      <div class="mt-6 pt-4 border-t border-white/10 text-center text-[11px] text-zinc-400">
+        By continuing, you gain access to high-resolution fine-art works and curations.
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 🌐 MAIN SITE WRAPPER (LOCKED UNTIL USER AUTHENTICATES) -->
+  <!-- ======================================================== -->
+  <div id="portfolio-app" class="locked-site flex flex-col min-h-screen transition-all duration-700">
+
+    <!-- Ambient Light Accents -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      <div class="absolute -top-32 -left-32 w-96 h-96 bg-gold-500/10 rounded-full blur-[140px]"></div>
+      <div class="absolute top-1/2 -right-40 w-[30rem] h-[30rem] bg-amber-600/5 rounded-full blur-[180px]"></div>
+      <div class="absolute -bottom-20 left-1/3 w-[26rem] h-[26rem] bg-indigo-950/20 rounded-full blur-[160px]"></div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 🧭 NAVIGATION BAR -->
+    <!-- ======================================================== -->
+    <header class="sticky top-0 z-40 backdrop-blur-xl bg-[#070709]/85 border-b border-white/[0.08] transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
+        <!-- Brand Logo & Symbol -->
+        <a href="#home" onclick="navigateTo('home'); return false;" class="flex items-center gap-3.5 group">
+          <div id="nav-logo-container" class="relative w-11 h-11 rounded-full bg-gradient-to-tr from-[#171720] via-[#242430] to-[#0d0d12] border border-gold-500/40 flex items-center justify-center p-2 shadow-lg shadow-black/80 group-hover:border-gold-500 transition-all duration-500 overflow-hidden">
+            <!-- Populated dynamically via LOGO_CONFIG -->
+            <svg viewBox="0 0 40 40" class="w-full h-full text-gold-500 transition-transform duration-700 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="20" cy="20" r="7" stroke="#f3d36b" stroke-width="1.5" />
+              <path d="M20 3v5M20 32v5M3 20h5M32 20h5M8 8l3.6 3.6M28.4 28.4l3.6 3.6M8 32l3.6-3.6M28.4 11.6l3.6-3.6" />
+              <circle cx="20" cy="20" r="2" fill="#d4af37" />
+            </svg>
+            <div class="absolute inset-0 rounded-full bg-gold-500/20 blur-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+          </div>
+
+          <div>
+            <span id="nav-brand-title" class="block font-cinzel tracking-[0.22em] text-sm md:text-base font-bold text-white uppercase group-hover:text-gold-300 transition-colors">
+              PRIME LENS
+            </span>
+            <span id="nav-photographer-name" class="block text-[10px] uppercase tracking-[0.25em] text-gold-500 font-medium">
+              Photography by R. Miller Hanniel
+            </span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Menu -->
+        <nav class="hidden md:flex items-center gap-8 text-xs uppercase tracking-[0.2em] font-medium">
+          <button onclick="navigateTo('home')" class="nav-link py-2 text-gold-300 font-semibold relative transition-colors hover:text-gold-400" data-page="home">Home</button>
+          <button onclick="navigateTo('gallery')" class="nav-link py-2 text-zinc-400 relative transition-colors hover:text-white" data-page="gallery">Gallery</button>
+          <button onclick="navigateTo('about')" class="nav-link py-2 text-zinc-400 relative transition-colors hover:text-white" data-page="about">About</button>
+          <button onclick="navigateTo('contact')" class="nav-link py-2 text-zinc-400 relative transition-colors hover:text-white" data-page="contact">Contact</button>
+
+          <!-- Authenticated User State in Navbar -->
+          <div id="nav-user-container" class="pl-4 border-l border-white/10 flex items-center gap-3">
+            <!-- Rendered by JS -->
+          </div>
+        </nav>
+
+        <!-- Mobile Quick Menu -->
+        <div class="flex items-center gap-2 md:hidden">
+          <div id="mobile-user-quick"></div>
+          <button id="mobile-menu-toggle" onclick="toggleMobileMenu()" class="p-2.5 rounded-lg bg-white/5 border border-white/10 text-zinc-300 hover:text-white focus:outline-none">
+            <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Mobile Drawer -->
+      <div id="mobile-menu" class="hidden md:hidden border-b border-white/10 bg-[#0c0c10] px-6 py-6 space-y-4">
+        <button onclick="navigateTo('home')" class="block w-full text-left py-2 text-sm uppercase tracking-widest text-gold-300 font-semibold">Home</button>
+        <button onclick="navigateTo('gallery')" class="block w-full text-left py-2 text-sm uppercase tracking-widest text-zinc-400 hover:text-white">Gallery</button>
+        <button onclick="navigateTo('about')" class="block w-full text-left py-2 text-sm uppercase tracking-widest text-zinc-400 hover:text-white">About</button>
+        <button onclick="navigateTo('contact')" class="block w-full text-left py-2 text-sm uppercase tracking-widest text-zinc-400 hover:text-white">Contact</button>
+        <div id="mobile-user-section" class="pt-4 border-t border-white/10">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </header>
+
+    <!-- ======================================================== -->
+    <!-- 📄 MAIN CONTENT AREA (SPA PAGES) -->
+    <!-- ======================================================== -->
+    <main class="relative z-10 flex-grow">
+
+      <!-- PAGE 1: HOME -->
+      <section id="page-home" class="page-view space-y-24 md:space-y-36 pb-20">
+        
+        <!-- Cinematic Hero -->
+        <div class="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
+          <div class="absolute inset-0 z-0">
+            <img id="hero-img-element" src="" alt="Hero Landscape" class="w-full h-full object-cover scale-105 filter brightness-75 transition-all duration-1000">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#070709] via-[#070709]/60 to-black/80"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(7,7,9,0.85)_100%)]"></div>
+          </div>
+
+          <div class="relative z-10 max-w-4xl mx-auto px-6 text-center space-y-8">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] border border-gold-500/30 backdrop-blur-md">
+              <span class="w-2 h-2 rounded-full bg-gold-400 animate-ping"></span>
+              <span id="hero-badge" class="text-[11px] uppercase tracking-[0.25em] text-gold-300 font-medium">Fine Art & Documentary Photography</span>
+            </div>
+
+            <div class="space-y-4">
+              <h1 class="font-cinzel text-4xl sm:text-6xl md:text-7xl font-bold tracking-wide text-white leading-[1.1]">
+                Every Frame <span class="italic font-serif font-normal gold-gradient-text block sm:inline">Tells a Story.</span>
+              </h1>
+              <p id="hero-description" class="text-sm sm:text-base md:text-lg text-zinc-300 font-light max-w-2xl mx-auto tracking-wide leading-relaxed">
+                Discover the beauty of ordinary moments through an extraordinary lens.
+              </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+              <button onclick="navigateTo('gallery')" class="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 text-black font-semibold text-xs uppercase tracking-[0.25em] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2">
+                <span>Explore Gallery</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </button>
+              <button onclick="navigateTo('about')" class="w-full sm:w-auto px-8 py-4 rounded-full bg-white/[0.05] border border-white/20 text-white font-medium text-xs uppercase tracking-[0.25em] hover:bg-white/10 hover:border-gold-500/50 transition-all duration-300 backdrop-blur-md">
+                About Me
+              </button>
+            </div>
+
+            <div class="pt-12 sm:pt-16 flex flex-col items-center gap-2 text-zinc-400 opacity-75 animate-bounce">
+              <span class="text-[10px] uppercase tracking-[0.25em]">Scroll to Discover</span>
+              <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Featured Photography Asymmetrical Grid -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/[0.08] pb-6">
+            <div>
+              <div class="flex items-center gap-2 text-gold-500 text-xs uppercase tracking-[0.2em] mb-2 font-medium">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <span>Curated Selection</span>
+              </div>
+              <h2 class="font-serif text-3xl sm:text-4xl text-white font-light">Featured Photographs</h2>
+            </div>
+            <button onclick="navigateTo('gallery')" class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-gold-400 hover:text-gold-300 transition-colors">
+              <span>View Full Collection</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </button>
+          </div>
+
+          <div id="home-featured-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Rendered by JavaScript -->
+          </div>
+        </section>
+
+        <!-- Visual Photography Categories -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div class="text-center max-w-2xl mx-auto space-y-3">
+            <span class="text-xs uppercase tracking-[0.25em] text-gold-400 font-medium block">Thematic Portfolios</span>
+            <h2 class="font-serif text-3xl sm:text-4xl text-white font-light">Explore By Category</h2>
+            <p class="text-xs sm:text-sm text-zinc-400 font-light">
+              Each photographic chapter represents an enduring pursuit of rare light, untamed landscapes, and vulnerable moments.
+            </p>
+          </div>
+
+          <div id="home-categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <!-- Rendered by JavaScript -->
+          </div>
+        </section>
+
+        <!-- Featured Quote Statement -->
+        <section class="relative py-20 border-y border-white/[0.08] bg-[#0c0c10]/60">
+          <div class="max-w-4xl mx-auto px-6 text-center space-y-6">
+            <div class="w-12 h-12 mx-auto rounded-full bg-gold-500/10 flex items-center justify-center text-gold-400 border border-gold-500/20">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+            </div>
+            <blockquote id="home-quote-text" class="font-serif text-2xl sm:text-3xl md:text-4xl text-white font-light italic leading-relaxed">
+              “Photography is the art of finding extraordinary beauty in ordinary moments.”
+            </blockquote>
+            <div id="home-quote-author" class="text-xs uppercase tracking-[0.25em] text-gold-400 font-medium">
+              — R. Miller Hanniel • Prime lens
+            </div>
+          </div>
+        </section>
+
+        <!-- About Preview -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="rounded-3xl border border-white/10 bg-white/[0.02] p-8 sm:p-12 lg:p-16 relative overflow-hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              <div class="lg:col-span-5 relative">
+                <div class="relative mx-auto max-w-sm rounded-2xl overflow-hidden border border-gold-500/40 shadow-2xl">
+                  <img id="about-preview-img" src="" alt="Photographer" class="w-full h-[26rem] object-cover filter contrast-105">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent"></div>
+                  <div class="absolute bottom-4 left-4 right-4 text-center">
+                    <span id="about-preview-name" class="text-xs uppercase tracking-[0.2em] text-gold-300 font-cinzel">R. Miller Hanniel</span>
+                    <span class="block text-[11px] text-zinc-400">Principal Artist & Chronicler</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="lg:col-span-7 space-y-6">
+                <span class="text-xs uppercase tracking-[0.25em] text-gold-400 font-medium block">Meet the Photographer</span>
+                <h2 class="font-serif text-3xl sm:text-4xl text-white font-light leading-tight">
+                  Behind the Shadows, <br>
+                  <span class="italic text-gold-300 font-serif">Seeking the Inescapable Glow.</span>
+                </h2>
+                <p id="about-preview-p1" class="text-zinc-300 font-light text-sm sm:text-base leading-relaxed"></p>
+                <p id="about-preview-p2" class="text-zinc-400 font-light text-xs sm:text-sm leading-relaxed"></p>
+                <div class="pt-2 flex flex-wrap gap-4">
+                  <button onclick="navigateTo('about')" class="px-6 py-3 rounded-full bg-white/10 hover:bg-gold-500 text-white hover:text-black text-xs uppercase tracking-[0.2em] font-medium transition-all">
+                    Read Full Artist Story
+                  </button>
+                  <button onclick="navigateTo('contact')" class="px-6 py-3 rounded-full border border-white/20 text-zinc-300 hover:text-white text-xs uppercase tracking-[0.2em] hover:border-gold-500 transition-all">
+                    Get In Touch
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contact CTA -->
+        <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <span class="text-xs uppercase tracking-[0.25em] text-gold-400 font-semibold block">Collaborations & Acquisitions</span>
+          <h2 class="font-serif text-3xl sm:text-5xl text-white font-light">Have a Story Worth Capturing?</h2>
+          <p class="text-sm sm:text-base text-zinc-400 font-light max-w-xl mx-auto">
+            Whether you require bespoke editorial commissions, private fine-art gallery prints, or commercial storytelling, let's connect.
+          </p>
+          <div class="pt-2">
+            <button onclick="navigateTo('contact')" class="px-8 py-4 rounded-full bg-gradient-to-r from-gold-500 to-gold-600 text-black font-semibold text-xs uppercase tracking-[0.25em] hover:shadow-[0_0_35px_rgba(212,175,55,0.4)] hover:scale-105 active:scale-95 transition-all duration-300">
+              Let's Connect
+            </button>
+          </div>
+        </section>
+
+      </section>
+
+      <!-- PAGE 2: GALLERY -->
+      <section id="page-gallery" class="page-view hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span class="text-xs uppercase tracking-[0.25em] text-gold-400 font-medium block">The Curated Archive</span>
+          <h1 class="font-serif text-4xl sm:text-5xl text-white font-light">Photography Gallery</h1>
+          <p class="text-xs sm:text-sm text-zinc-400 font-light leading-relaxed">
+            Filter through specialized thematic series or search specific moments, lighting moods, and locations.
+          </p>
+        </div>
+
+        <!-- Search & Filters -->
+        <div class="space-y-6">
+          <div class="max-w-md mx-auto relative">
+            <svg class="w-4 h-4 text-zinc-500 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" id="gallery-search" oninput="handleSearch(this.value)" placeholder="Search by title, location, tag, or mood..." class="w-full pl-11 pr-10 py-3 rounded-full bg-[#121217] border border-white/10 text-xs sm:text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-gold-500 transition-all shadow-inner">
+            <button id="gallery-search-clear" onclick="clearSearch()" class="hidden absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <div id="gallery-category-pills" class="flex flex-wrap items-center justify-center gap-2 pt-2">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-zinc-400 border-b border-white/[0.08] pb-4">
+          <span>Showing <strong id="gallery-counter" class="text-white">0</strong> Photographs</span>
+          <button id="gallery-clear-filter-btn" onclick="filterGallery('all')" class="hidden text-gold-400 hover:underline">Clear category filter</button>
+        </div>
+
+        <!-- Masonry Grid -->
+        <div id="gallery-masonry" class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+          <!-- Rendered via JavaScript -->
+        </div>
+
+        <div id="gallery-empty-state" class="hidden py-20 text-center space-y-4 rounded-3xl border border-dashed border-white/10 bg-white/[0.01]">
+          <svg class="w-12 h-12 text-zinc-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <h3 class="font-serif text-xl text-white">No Photographs Found</h3>
+          <p class="text-xs text-zinc-400 max-w-sm mx-auto">No images match your query. Try searching another keyword or resetting the category filter.</p>
+          <button onclick="resetGalleryFilters()" class="px-6 py-2.5 rounded-full bg-white/10 text-xs uppercase tracking-wider text-white hover:bg-gold-500 hover:text-black transition-colors">Reset All Filters</button>
+        </div>
+      </section>
+
+      <!-- PAGE 3: ABOUT -->
+      <section id="page-about" class="page-view hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span class="text-xs uppercase tracking-[0.25em] text-gold-400 font-medium block">Behind the Lens</span>
+          <h1 id="about-photographer-name" class="font-serif text-4xl sm:text-6xl text-white font-light">R. Miller Hanniel</h1>
+          <p id="about-tagline-sub" class="text-xs sm:text-sm text-zinc-400 font-light tracking-wide">
+            Founder, creative director, and visual chronicler at Prime lens.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          <div class="lg:col-span-5 space-y-6">
+            <div class="relative rounded-3xl overflow-hidden border border-gold-500/40 shadow-2xl bg-zinc-900 group">
+              <img id="about-page-portrait" src="" alt="Photographer Portrait" class="w-full h-[32rem] object-cover filter contrast-105 group-hover:scale-105 transition-transform duration-700">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"></div>
+              <div class="absolute bottom-6 left-6 right-6 space-y-1">
+                <span id="about-page-tagline" class="text-[10px] uppercase font-mono tracking-widest text-gold-400">Naturalist • Visual Storyteller</span>
+                <h3 id="about-page-author-bottom" class="font-serif text-xl text-white">R. Miller Hanniel</h3>
+                <p class="text-xs text-zinc-400 font-light">Obsessed with the fleeting interplay of harsh contrast, dawn mist, and quiet human vulnerability.</p>
+              </div>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
+              <h4 class="text-xs uppercase tracking-widest text-gold-400 font-semibold flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span>Philosophy of the Craft</span>
+              </h4>
+              <p id="about-philosophy-quote" class="text-xs text-zinc-300 font-light leading-relaxed italic"></p>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 space-y-8 text-zinc-300 font-light leading-relaxed text-sm sm:text-base">
+            <div class="space-y-4">
+              <h2 class="font-serif text-2xl sm:text-3xl text-white font-normal">
+                The Genesis of <span id="about-genesis-brand" class="italic text-gold-300">Prime lens</span>
+              </h2>
+              <p id="about-full-p1"></p>
+              <p id="about-full-p2"></p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-gradient-to-br from-[#171720] to-[#0d0d12] border-l-4 border-gold-500 space-y-2">
+              <span class="text-xs uppercase tracking-widest text-gold-300 font-medium block">Creative Vision & Approach</span>
+              <p id="about-approach-quote" class="text-xs sm:text-sm text-zinc-300 italic"></p>
+            </div>
+
+            <div class="space-y-4">
+              <h3 class="font-serif text-xl sm:text-2xl text-white font-normal">What Photography Means to Me</h3>
+              <p id="about-meaning-text"></p>
+            </div>
+
+            <div class="pt-4 flex flex-wrap gap-4 border-t border-white/10">
+              <button onclick="navigateTo('gallery')" class="px-8 py-3.5 rounded-full bg-gold-500 text-black font-semibold text-xs uppercase tracking-[0.2em] hover:bg-gold-400 transition-all shadow-lg shadow-gold-500/20">
+                View My Work
+              </button>
+              <button onclick="navigateTo('contact')" class="px-8 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-medium text-xs uppercase tracking-[0.2em] transition-all">
+                Contact Me
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE 4: CONTACT -->
+      <section id="page-contact" class="page-view hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span class="text-xs uppercase tracking-[0.25em] text-gold-400 font-medium block">Get In Touch</span>
+          <h1 class="font-serif text-4xl sm:text-6xl text-white font-light">Let's Create Something Beautiful.</h1>
+          <p class="text-xs sm:text-sm text-zinc-400 font-light max-w-xl mx-auto leading-relaxed">
+            Have a question, collaboration idea, or photography project in mind? I'd love to hear from you.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start max-w-6xl mx-auto">
+          <!-- Contact Info Details -->
+          <div class="lg:col-span-5 space-y-8">
+            <div class="space-y-4">
+              <h2 class="font-serif text-2xl text-white">Direct Correspondence</h2>
+              <p class="text-xs sm:text-sm text-zinc-400 font-light leading-relaxed">
+                Available worldwide for commissions, private fine-art licensing, print acquisitions, and editorial assignments.
+              </p>
+            </div>
+
+            <div class="space-y-4">
+              <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center gap-4">
+                <div class="p-3 rounded-xl bg-gold-500/15 text-gold-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div>
+                  <span class="text-[10px] uppercase tracking-wider text-zinc-500 block">Professional Inquiries</span>
+                  <a id="contact-email-link" href="" class="text-sm text-white hover:text-gold-400 transition-colors"></a>
+                </div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center gap-4">
+                <div class="p-3 rounded-xl bg-gold-500/15 text-gold-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 2v2M7 2v2M3 8h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div>
+                  <span class="text-[10px] uppercase tracking-wider text-zinc-500 block">Instagram Journal</span>
+                  <a id="contact-insta-link" href="" target="_blank" class="text-sm text-white hover:text-gold-400 transition-colors"></a>
+                </div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center gap-4">
+                <div class="p-3 rounded-xl bg-gold-500/15 text-gold-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </div>
+                <div>
+                  <span class="text-[10px] uppercase tracking-wider text-zinc-500 block">Base & Global Availability</span>
+                  <span id="contact-location-text" class="text-sm text-white"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Element -->
+          <div class="lg:col-span-7">
+            <div class="p-8 sm:p-10 rounded-3xl bg-zinc-950/80 border border-white/10 shadow-2xl relative overflow-hidden">
+              <div id="contact-success-box" class="hidden py-12 text-center space-y-4">
+                <div class="w-16 h-16 rounded-full bg-gold-500/20 border border-gold-500/40 text-gold-300 flex items-center justify-center mx-auto">
+                  <svg class="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <h3 class="font-serif text-2xl text-white">Message Dispatched</h3>
+                <p class="text-xs sm:text-sm text-zinc-400 max-w-md mx-auto leading-relaxed">
+                  Thank you for reaching out. Your message has been received, and I will reply as soon as field duties permit.
+                </p>
+                <button onclick="resetContactForm()" class="mt-4 px-6 py-2.5 rounded-full bg-white/10 text-xs uppercase tracking-wider text-white hover:bg-white/20 transition-colors">
+                  Send Another Message
+                </button>
+              </div>
+
+              <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-6">
+                <div id="contact-error-box" class="hidden p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01"/></svg>
+                  <span id="contact-error-msg">Please complete all fields.</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div class="space-y-2">
+                    <label class="block text-xs uppercase tracking-wider text-zinc-300 font-medium">Full Name *</label>
+                    <input type="text" id="contact-name" required placeholder="e.g. Eleanor Vance" class="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/15 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-gold-500 transition-all">
+                  </div>
+
+                  <div class="space-y-2">
+                    <label class="block text-xs uppercase tracking-wider text-zinc-300 font-medium">Email Address *</label>
+                    <input type="email" id="contact-email" required placeholder="e.g. eleanor@example.com" class="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/15 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-gold-500 transition-all">
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <label class="block text-xs uppercase tracking-wider text-zinc-300 font-medium">Subject / Project Scope</label>
+                  <input type="text" id="contact-subject" placeholder="e.g. Print Acquisition / Editorial Feature" class="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/15 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-gold-500 transition-all">
+                </div>
+
+                <div class="space-y-2">
+                  <label class="block text-xs uppercase tracking-wider text-zinc-300 font-medium">Message *</label>
+                  <textarea id="contact-message" required rows="5" placeholder="Describe your vision, timeline, or requested photographic inquiry..." class="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/15 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-gold-500 transition-all resize-none"></textarea>
+                </div>
+
+                <button type="submit" id="contact-submit-btn" class="w-full py-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-black font-semibold text-xs uppercase tracking-[0.25em] shadow-lg hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:brightness-110 active:scale-[0.99] transition-all duration-300 flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                  <span>Transmit Message</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ======================================================== -->
+    <!-- ⚓ FOOTER -->
+    <!-- ======================================================== -->
+    <footer class="border-t border-white/[0.08] bg-[#070709] text-zinc-400 py-16 relative z-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
+          
+          <div class="md:col-span-5 space-y-4">
+            <div class="flex items-center gap-3">
+              <div id="footer-logo-container" class="w-8 h-8 rounded-full bg-[#181822] border border-gold-500/40 flex items-center justify-center p-1.5 overflow-hidden">
+                <!-- Populated dynamically via LOGO_CONFIG -->
+                <svg class="w-full h-full text-gold-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/></svg>
+              </div>
+              <div>
+                <span id="footer-brand-name" class="font-cinzel text-sm tracking-[0.2em] font-bold text-white uppercase block">PRIME LENS</span>
+                <span id="footer-photographer-name" class="text-[10px] tracking-[0.25em] text-gold-500 font-medium block">R. Miller Hanniel</span>
+              </div>
+            </div>
+            <p class="text-xs text-zinc-400 font-light leading-relaxed max-w-sm">
+              Dedicated to the contemplation of natural light, deep shadow, and genuine human presence. Available for commissions, editorial licensing, and fine-art acquisitions globally.
+            </p>
+          </div>
+
+          <div class="md:col-span-3 space-y-3">
+            <span class="text-xs uppercase tracking-widest text-gold-400 font-medium block">Navigation</span>
+            <ul class="text-xs space-y-2">
+              <li><button onclick="navigateTo('home')" class="hover:text-white transition-colors">Home</button></li>
+              <li><button onclick="navigateTo('gallery')" class="hover:text-white transition-colors">Gallery</button></li>
+              <li><button onclick="navigateTo('about')" class="hover:text-white transition-colors">About</button></li>
+              <li><button onclick="navigateTo('contact')" class="hover:text-white transition-colors">Contact</button></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-4 space-y-4">
+            <span class="text-xs uppercase tracking-widest text-gold-400 font-medium block">Connect</span>
+            <p class="text-xs text-zinc-400">For inquiries, print purchases, and private assignments.</p>
+            <div class="flex items-center gap-3 pt-1">
+              <a id="footer-insta" href="" target="_blank" class="p-2.5 rounded-full bg-white/[0.04] border border-white/10 hover:border-gold-500 hover:text-gold-300 transition-all">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </a>
+              <a id="footer-mail" href="" class="p-2.5 rounded-full bg-white/[0.04] border border-white/10 hover:border-gold-500 hover:text-gold-300 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 gap-4">
+          <p>© <span id="current-year"></span> <span id="footer-copy-brand">PRIME LENS</span>. All rights reserved. Photography by <span id="footer-copy-name">R. Miller Hanniel</span>.</p>
+          <button onclick="lockAndLogout()" class="text-gold-400 hover:underline text-[11px] font-mono">Sign Out & Lock Portfolio</button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Floating Back to Top Button -->
+    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-[#181820]/90 border border-gold-500/40 text-gold-300 shadow-2xl backdrop-blur-md hidden hover:bg-gold-500 hover:text-black transition-all duration-300">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+    </button>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 👤 USER PROFILE MODAL (VIEW STORED ACCOUNT DETAILS) -->
+  <!-- ======================================================== -->
+  <div id="profile-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-[#121217] border border-white/15 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl">
+      <div class="px-6 py-5 bg-[#171722] border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-gold-500/20 border border-gold-500/40 flex items-center justify-center text-gold-400 font-bold text-sm">
+            <span id="profile-avatar-initials">MH</span>
+          </div>
+          <div>
+            <h2 class="font-cinzel text-lg text-white">Collector Profile</h2>
+            <p class="text-[11px] text-zinc-400">Authenticated Member</p>
+          </div>
+        </div>
+        <button onclick="closeProfileModal()" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4">
+        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-3">
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-zinc-500 block">Full Name</span>
+            <span id="profile-display-name" class="text-sm font-semibold text-white"></span>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-zinc-500 block">Registered Email</span>
+            <span id="profile-display-email" class="text-sm text-zinc-300"></span>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-zinc-500 block">Photography Interest</span>
+            <span id="profile-display-interest" class="inline-block px-2.5 py-1 rounded-full text-xs bg-gold-500/15 text-gold-300 border border-gold-500/30"></span>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-zinc-500 block">Access Level</span>
+            <span class="text-xs text-emerald-400 font-mono">Full Portfolio Access</span>
+          </div>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <button onclick="lockAndLogout()" class="w-full py-3 rounded-xl bg-red-500/15 border border-red-500/30 text-red-300 hover:bg-red-500/25 text-xs uppercase tracking-wider font-semibold transition-colors">
+            Sign Out & Lock
+          </button>
+          <button onclick="closeProfileModal()" class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs uppercase tracking-wider transition-colors">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 🔍 FULLSCREEN LIGHTBOX MODAL -->
+  <!-- ======================================================== -->
+  <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl hidden flex flex-col justify-between p-4 sm:p-8">
+    <div class="flex items-center justify-between z-10">
+      <div class="flex items-center gap-3">
+        <span id="lb-counter" class="text-xs font-mono tracking-widest text-gold-400">1 / 12</span>
+        <span class="hidden sm:inline text-zinc-500">•</span>
+        <span id="lb-category" class="hidden sm:inline text-xs uppercase tracking-wider text-zinc-300">Nature</span>
+      </div>
+      <button onclick="closeLightbox()" class="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors" title="Close (Esc)">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="relative flex-1 flex items-center justify-center my-4 select-none">
+      <button onclick="prevLightboxImage()" class="absolute left-2 sm:left-6 z-20 p-3 rounded-full bg-black/50 hover:bg-gold-500 text-white hover:text-black border border-white/20 backdrop-blur-md transition-all duration-300" aria-label="Previous">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+
+      <div class="max-h-[75vh] max-w-[90vw] flex items-center justify-center">
+        <img id="lb-image" src="" alt="Enlarged view" class="max-h-[75vh] max-w-[90vw] object-contain rounded-lg shadow-2xl transition-all duration-300">
+      </div>
+
+      <button onclick="nextLightboxImage()" class="absolute right-2 sm:right-6 z-20 p-3 rounded-full bg-black/50 hover:bg-gold-500 text-white hover:text-black border border-white/20 backdrop-blur-md transition-all duration-300" aria-label="Next">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="max-w-3xl mx-auto w-full text-center space-y-1.5 z-10 bg-black/40 backdrop-blur-md py-3 px-6 rounded-2xl border border-white/10">
+      <h3 id="lb-title" class="font-serif text-lg sm:text-xl text-white font-normal"></h3>
+      <p id="lb-desc" class="text-xs text-zinc-300 font-light leading-relaxed"></p>
+      <span id="lb-exif" class="text-[11px] font-mono text-gold-400 block pt-1"></span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- ⚙️ SEPARATE CUSTOMIZATION & JAVASCRIPT ENGINE -->
+  <!-- ======================================================== -->
+  <script>
+    /*
+      ==========================================================================
+      SECTION 1: 📸 ALL IMAGE ASSETS (EASILY REPLACE ALL PHOTO URLS HERE)
+      ==========================================================================
+      Simply swap any URL string below with your own photograph link!
+      (Works with Cloudinary, Unsplash, Imgur direct image links, AWS S3, etc.)
+    */
+    const IMAGE_ASSETS = {
+      // 1. Hero Full-Screen Background Image
+      heroBackground: "https://drive.google.com/thumbnail?id=1t5dRl3-9llMUbY4avuVHR6tMYVbVL0BF&sz=w1000",
+
+      // 2. Photographer Portrait Photo (Appears on Home & About page)
+      photographerPortrait: "https://drive.google.com/thumbnail?id=14rIj3H72gEvupr8F_8ykv-nl1TK6Hqjv&sz=w1000",
+
+      // 3. Category Cover Photos
+      categoryCards: {
+        nature: "https://drive.google.com/thumbnail?id=1KOk4P_ynVhW5vZvkIPb4JiOa2NT1Y8Mp&sz=w1000",
+        wildlife: "https://drive.google.com/thumbnail?id=1__K7azEMEef6hLXvQEkkyTgtVk8L_e90&sz=w1000",
+        portraits: "https://drive.google.com/thumbnail?id=1xEI6YbzayKvPgWHY_x2-PfvIykYW_e9H&sz=w1000",
+        street: "https://drive.google.com/thumbnail?id=16I_lGfrgTxayXWa3XZUWjnqegSdPObRu&sz=w1000",
+        travel: "https://drive.google.com/thumbnail?id=1zPryANyTGlkDdzNUHedrAcmVInkaysD8&sz=w1000",
+        macro: "https://drive.google.com/thumbnail?id=1K1aDmo1JxysQj_N6LWwfJ4j2L07-3G2A&sz=w1000",
+        architecture: "https://drive.google.com/thumbnail?id=1SfnNOTFX244keFylWaxO6tCvKnXqKbFP&sz=w1000",
+        bw: "https://drive.google.com/thumbnail?id=1ZS9UgffIp-Dad0k7iudtKlOip6rP5zVy&sz=w1000"
+      },
+
+      // 4. Complete Gallery Photograph List
+      galleryPhotos: [
+        {
+          id: 1,
+          title: "Whispering Mists of the Highlands",
+          category: "Nature and Landscapes",
+          catSlug: "nature",
+          url: "https://drive.google.com/thumbnail?id=1QJtMr1ihw4sCFEJbQIa_HrC2cxGAA2PV&sz=w1000",
+          description: "First dawn piercing through glacial vapor over the serpentine valleys of the north.",
+          exif: "Sony A7R V • 24-70mm f/2.8 GM • 1/250s at f/8.0, ISO 100",
+          tags: ["summer", "village", "dawn", "nordic"],
+          featured: true
+        },
+        {
+          id: 2,
+          title: "The Solitary Apex",
+          category: "Wildlife",
+          catSlug: "wildlife",
+          url: "https://drive.google.com/thumbnail?id=1oOb0eiyb-noQLVeD_nu5XGyoS_n7wBnG&sz=w1000",
+          description: "Golden hour silhouette of an African lion overlooking the sprawling Mara savanna.",
+          exif: "Canon EOS R5 • 400mm f/2.8L IS III • 1/1200s at f/3.2, ISO 400",
+          tags: ["wildlife", "savanna", "lion", "golden hour"],
+          featured: true
+        },
+        {
+          id: 3,
+          title: "Gaze into the Chromatic Void",
+          category: "Portrait Photography",
+          catSlug: "portraits",
+          url: "https://drive.google.com/thumbnail?id=1qYZx8kUSjcPY-Vga42aisr65iPB3-TEF&sz=w1000",
+          description: "Natural directional window light illuminating delicate facial emotion and introspection.",
+          exif: "Fujifilm GFX 100S • 110mm f/2 • 1/160s at f/2.2, ISO 80",
+          tags: ["portrait", "shadow", "eyes", "studio light"],
+          featured: true
+        },
+        {
+          id: 4,
+          title: "Rain Smeared Neon Nocturne",
+          category: "Street Photography",
+          catSlug: "street",
+          url: "https://drive.google.com/thumbnail?id=1hWP8rRa_blcJZ4NurtGWlGE6Gci8irO0&sz=w1000",
+          description: "Reflections dancing over damp asphalt in Shinjuku alleys as midnight commuters navigate autumn rain.",
+          exif: "Leica Q2 • 28mm Summilux f/1.7 • 1/80s at f/1.7, ISO 1600",
+          tags: ["street", "neon", "rain", "tokyo", "night"],
+          featured: true
+        },
+        {
+          id: 5,
+          title: "Sands of the Thousand Dunes",
+          category: "Travel Photography",
+          catSlug: "travel",
+          url: "https://drive.google.com/thumbnail?id=1GMD78edPGckT5gHFXS2tM3H4Od_U0FH4&sz=w1000",
+          description: "Wind-carved geometry creating endless red dunes in the heart of Sossusvlei at twilight.",
+          exif: "Nikon Z8 • 70-200mm f/2.8 VR S • 1/500s at f/8, ISO 64",
+          tags: ["travel", "desert", "dunes", "warmth"],
+          featured: false
+        },
+        {
+          id: 6,
+          title: "Crystalline Chlorophyll Architecture",
+          category: "Macro and Creative Photography",
+          catSlug: "macro",
+          url: "https://drive.google.com/thumbnail?id=1A_XSPzFJIbkLEapLhiaQfnx64Dfzr5n9&sz=w1000",
+          description: "Extreme macro capture of morning dew droplets suspended on fern fronds, refracting the sky.",
+          exif: "Sony A7R V • 90mm f/2.8 Macro G • 1/125s at f/11, ISO 200",
+          tags: ["macro", "dew", "botanical", "geometry"],
+          featured: false
+        },
+        {
+          id: 7,
+          title: "The Concrete Monolith",
+          category: "Architecture",
+          catSlug: "architecture",
+          url: "https://drive.google.com/thumbnail?id=1tBFhXJhahLae7D1JW5U0doDV9Uma_MN9&sz=w1000",
+          description: "Symmetrical vertical convergence of brutalist and modern glass skyscrapers piercing overcast clouds.",
+          exif: "Hasselblad X2D 100C • XCD 21mm f/4 • 1/60s at f/11, ISO 64",
+          tags: ["architecture", "minimalism", "lines", "urban"],
+          featured: true
+        },
+        {
+          id: 8,
+          title: "Monochrome Tempest",
+          category: "Black and White Photography",
+          catSlug: "bw",
+          url: "https://drive.google.com/thumbnail?id=17wo1kN66lmoAVeDhJEIg1JLzqDeTIc92&sz=w1000",
+          description: "High contrast oceanic swells colliding against basalt coastal monoliths.",
+          exif: "Canon EOS R5 • 100-500mm f/4.5-7.1L • 1/2000s at f/6.3, ISO 250",
+          tags: ["monochrome", "black and white", "ocean", "drama"],
+          featured: true
+        },
+        {
+          id: 9,
+          title: "The Silent Wanderer in Alpine Pines",
+          category: "Wildlife",
+          catSlug: "wildlife",
+          url: "https://drive.google.com/thumbnail?id=1IX2FYeb2Qgso_YY9bsdXS4ev4R0vOFbF&sz=w1000",
+          description: "A momentary glance from a mountain stag camouflaged within ancient pine trees in golden rim light.",
+          exif: "Sony A1 • 600mm f/4 GM • 1/800s at f/4.0, ISO 640",
+          tags: ["wildlife", "deer", "forest", "golden"],
+          featured: false
+        },
+        {
+          id: 10,
+          title: "The Emerald Glacial Fjord",
+          category: "Nature and Landscapes",
+          catSlug: "nature",
+          url: "https://drive.google.com/thumbnail?id=10CqAk3xWd4LbcWpUAr7zSK3ijniJsBxf&sz=w1000",
+          description: "Pure reflection of ancient crags in mirror-still glacial runoff water in southern Norway.",
+          exif: "Nikon Z7 II • 14-30mm f/4 S • 2.5s at f/11, ISO 64",
+          tags: ["fjord", "landscape", "reflection", "nordic"],
+          featured: false
+        },
+        {
+          id: 11,
+          title: "Silhouettes of the Medina",
+          category: "Travel Photography",
+          catSlug: "travel",
+          url: "https://drive.google.com/thumbnail?id=1jJk44pCJgM6JP5fI6UEOixshJ_4wwU3X&sz=w1000",
+          description: "Shafts of dusty Sahara sunlight cutting through wooden roof slats in the old souks of Fez.",
+          exif: "Leica M11 • 35mm Summicron-M f/2 • 1/250s at f/2.8, ISO 400",
+          tags: ["travel", "light rays", "morocco", "street"],
+          featured: false
+        },
+        {
+          id: 12,
+          title: "Shadow Study No. 4",
+          category: "Black and White Photography",
+          catSlug: "bw",
+          url: "https://drive.google.com/thumbnail?id=1Vwyoc3bb-rA4rai7XZg7tOy3CMjeZza0&sz=w1000",
+          description: "A study in severe geometry and human proportion. Steep shadows cast by late afternoon sun.",
+          exif: "Fujifilm X-T5 • 33mm f/1.4 R LM WR • 1/1000s at f/4, ISO 125",
+          tags: ["black and white", "minimalist", "shadows"],
+          featured: false
+        }
+      ]
+    };
+
+    /*
+      ==========================================================================
+      SECTION 1.5: 🌟 WEBSITE LOGO CONFIGURATION (CUSTOMIZE YOUR LOGO HERE)
+      ==========================================================================
+      You can change the website logo in TWO easy ways:
+      Option A: Set useCustomImage to true and paste your image URL in imageUrl.
+      Option B: Keep useCustomImage as false and customize svgMarkup directly.
+    */
+    const LOGO_CONFIG = {
+      // Set to true if you want to use an image URL (PNG, JPG, SVG, WebP) instead of vector code
+      useCustomImage: true,
+
+      // Paste your image URL here (used when useCustomImage: true)
+      imageUrl: "https://drive.google.com/thumbnail?id=1Xd4MsuGsjWSmHnkYtcpiDyFkkCNRiag-&sz=w1000",
+      imageAlt: "Prime Lens Logo",
+
+      // Custom SVG vector markup (used when useCustomImage: false)
+      svgMarkup: `
+        <svg viewBox="0 0 40 40" class="w-full h-full text-gold-500 transition-transform duration-700 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="20" cy="20" r="7" stroke="#f3d36b" stroke-width="1.5" />
+          <path d="M20 3v5M20 32v5M3 20h5M32 20h5M8 8l3.6 3.6M28.4 28.4l3.6 3.6M8 32l3.6-3.6M28.4 11.6l3.6-3.6" />
+          <circle cx="20" cy="20" r="2" fill="#d4af37" />
+        </svg>
+      `
+    };
+
+    /*
+      ==========================================================================
+      SECTION 2: ✍️ PERSONAL & BRAND DETAILS (MODIFY YOUR TEXT INFO HERE)
+      ==========================================================================
+      Edit your artist name, brand tagline, bio, quotes, and contact data here!
+    */
+    const PERSONAL_DETAILS = {
+      brandName: "PRIME LENS",
+      photographerName: "R. Miller Hanniel",
+      tagline: "Every Frame Tells a Story.",
+      heroDescription: "Discover the beauty of ordinary moments through an extraordinary lens. Photography by R. Miller Hanniel.",
+      heroBadge: "Fine Art & Documentary Photography",
+      
+      // Quotes
+      quoteText: "Photography is the art of finding extraordinary beauty in ordinary moments.",
+      quoteAuthor: "R. Miller Hanniel • Prime lens",
+
+      // About Page & Bio Text
+      about: {
+        tagline: "Naturalist • Visual Storyteller",
+        p1: "Welcome to Prime lens. I am R. Miller Hanniel. My photographic journey began with a single curiosity: how natural light carves emotion into stillness. Through wilderness expeditions, midnight urban rambles, and intimate portrait encounters, my work celebrates transient, unscripted truth.",
+        p2: "Every photograph in this archive is an invitation to slow down, look deeper, and recognize the quiet poetry thriving within our world.",
+        philosophy: "Optics and sensors are only instruments of memory. The photograph exists before the shutter trips; it lives in the patience to wait until the chaos of the world settles into harmony.",
+        approach: "I do not fabricate light; I yield to it. Whether shooting in torrential midnight storms or the delicate gold of equatorial dusk, my commitment is to preserve authenticity without heavy-handed contrivance.",
+        meaning: "Photography is an act of deep reverence. In a world characterized by hurried consumption and endless ephemeral noise, a still photograph forces us to pause. It anchors a slice of time that can never recur."
+      },
+
+      // Contact & Social Media Information
+      contact: {
+        email: "millerhanniel009@gmail.com",
+        instagram: "@primelens",
+        instagramUrl: "https://instagram.com",
+        location: "Studio Base / 63/81-b Round Road Pudur Dindigul"
+      }
+    };
+
+    /*
+      ==========================================================================
+      SECTION 3: 📂 CATEGORIES DEFINITION
+      ==========================================================================
+    */
+    const CATEGORIES = [
+      { name: "Nature and Landscapes", slug: "nature", image: IMAGE_ASSETS.categoryCards.nature, count: "14+ Works" },
+      { name: "Wildlife", slug: "wildlife", image: IMAGE_ASSETS.categoryCards.wildlife, count: "8+ Works" },
+      { name: "Portrait Photography", slug: "portraits", image: IMAGE_ASSETS.categoryCards.portraits, count: "12+ Works" },
+      { name: "Street Photography", slug: "street", image: IMAGE_ASSETS.categoryCards.street, count: "10+ Works" },
+      { name: "Travel Photography", slug: "travel", image: IMAGE_ASSETS.categoryCards.travel, count: "16+ Works" },
+      { name: "Macro and Creative Photography", slug: "macro", image: IMAGE_ASSETS.categoryCards.macro, count: "7+ Works" },
+      { name: "Architecture", slug: "architecture", image: IMAGE_ASSETS.categoryCards.architecture, count: "9+ Works" },
+      { name: "Black and White Photography", slug: "bw", image: IMAGE_ASSETS.categoryCards.bw, count: "11+ Works" }
+    ];
+
+    /*
+      ==========================================================================
+      SECTION 4: ⚙️ WEBSITE CORE ENGINE & LOGIC
+      ==========================================================================
+    */
+    // State variables
+    let currentActivePage = 'home';
+    let currentGalleryCategory = 'all';
+    let currentSearchTerm = '';
+    let currentLightboxList = [];
+    let currentLightboxIndex = 0;
+    let currentUserSession = null;
+
+    // Initialization on Page Load
+    document.addEventListener('DOMContentLoaded', () => {
+      initYear();
+      renderBrandLogos();
+      populateWebsiteDetails();
+      renderHomeFeatured();
+      renderHomeCategories();
+      renderGalleryCategoryPills();
+      renderGallery();
+      setupScrollListener();
+      setupKeyboardListeners();
+
+      // Check access gate authentication requirement
+      verifyAccessGate();
+    });
+
+    function initYear() {
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+    }
+
+    // Function to inject custom logo into gatekeeper modal, header, and footer
+    function renderBrandLogos() {
+      const gateLogo = document.getElementById('gate-logo-container');
+      const navLogo = document.getElementById('nav-logo-container');
+      const footerLogo = document.getElementById('footer-logo-container');
+
+      const logoContent = LOGO_CONFIG.useCustomImage 
+        ? `<img src="${LOGO_CONFIG.imageUrl}" alt="${LOGO_CONFIG.imageAlt}" class="w-full h-full object-contain">`
+        : LOGO_CONFIG.svgMarkup;
+
+      if (gateLogo) gateLogo.innerHTML = logoContent;
+      if (navLogo) {
+        navLogo.innerHTML = logoContent + '<div class="absolute inset-0 rounded-full bg-gold-500/20 blur-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>';
+      }
+      if (footerLogo) footerLogo.innerHTML = logoContent;
+    }
+
+    // Populate data into the DOM from IMAGE_ASSETS & PERSONAL_DETAILS
+    function populateWebsiteDetails() {
+      // 1. Brand Names across the UI
+      document.getElementById('gate-brand-name').textContent = PERSONAL_DETAILS.brandName;
+      document.getElementById('gate-brand-sub').textContent = `Private Photography Portfolio • ${PERSONAL_DETAILS.photographerName}`;
+      document.getElementById('nav-brand-title').textContent = PERSONAL_DETAILS.brandName;
+      document.getElementById('nav-photographer-name').textContent = `Photography by ${PERSONAL_DETAILS.photographerName}`;
+      document.getElementById('footer-brand-name').textContent = PERSONAL_DETAILS.brandName;
+      document.getElementById('footer-photographer-name').textContent = PERSONAL_DETAILS.photographerName;
+      document.getElementById('footer-copy-brand').textContent = PERSONAL_DETAILS.brandName;
+      document.getElementById('footer-copy-name').textContent = PERSONAL_DETAILS.photographerName;
+
+      // 2. Hero Section
+      document.getElementById('hero-img-element').src = IMAGE_ASSETS.heroBackground;
+      document.getElementById('hero-badge').textContent = PERSONAL_DETAILS.heroBadge;
+      document.getElementById('hero-description').textContent = PERSONAL_DETAILS.heroDescription;
+
+      // 3. Quotes
+      document.getElementById('home-quote-text').textContent = `“${PERSONAL_DETAILS.quoteText}”`;
+      document.getElementById('home-quote-author').textContent = `— ${PERSONAL_DETAILS.quoteAuthor}`;
+
+      // 4. About Elements
+      document.getElementById('about-preview-img').src = IMAGE_ASSETS.photographerPortrait;
+      document.getElementById('about-preview-name').textContent = PERSONAL_DETAILS.photographerName;
+      document.getElementById('about-preview-p1').textContent = PERSONAL_DETAILS.about.p1;
+      document.getElementById('about-preview-p2').textContent = PERSONAL_DETAILS.about.p2;
+
+      document.getElementById('about-photographer-name').textContent = PERSONAL_DETAILS.photographerName;
+      document.getElementById('about-page-portrait').src = IMAGE_ASSETS.photographerPortrait;
+      document.getElementById('about-page-tagline').textContent = PERSONAL_DETAILS.about.tagline;
+      document.getElementById('about-page-author-bottom').textContent = PERSONAL_DETAILS.photographerName;
+      document.getElementById('about-philosophy-quote').textContent = `“${PERSONAL_DETAILS.about.philosophy}”`;
+      document.getElementById('about-genesis-brand').textContent = PERSONAL_DETAILS.brandName;
+      document.getElementById('about-full-p1').textContent = PERSONAL_DETAILS.about.p1;
+      document.getElementById('about-full-p2').textContent = PERSONAL_DETAILS.about.p2;
+      document.getElementById('about-approach-quote').textContent = `“${PERSONAL_DETAILS.about.approach}”`;
+      document.getElementById('about-meaning-text').textContent = PERSONAL_DETAILS.about.meaning;
+
+      // 5. Contact Details
+      document.getElementById('contact-email-link').textContent = PERSONAL_DETAILS.contact.email;
+      document.getElementById('contact-email-link').href = `mailto:${PERSONAL_DETAILS.contact.email}`;
+      document.getElementById('contact-insta-link').textContent = PERSONAL_DETAILS.contact.instagram;
+      document.getElementById('contact-insta-link').href = PERSONAL_DETAILS.contact.instagramUrl;
+      document.getElementById('contact-location-text').textContent = PERSONAL_DETAILS.contact.location;
+
+      document.getElementById('footer-mail').href = `mailto:${PERSONAL_DETAILS.contact.email}`;
+      document.getElementById('footer-insta').href = PERSONAL_DETAILS.contact.instagramUrl;
+    }
+
+    // =========================================================================
+    // 🔒 GATEKEEPER LOGIC (MANDATORY SIGNUP/LOGIN TO ENTER)
+    // =========================================================================
+    function verifyAccessGate() {
+      try {
+        const stored = localStorage.getItem('lftd_active_user');
+        if (stored) {
+          currentUserSession = JSON.parse(stored);
+        }
+      } catch (e) {
+        currentUserSession = null;
+      }
+
+      const gate = document.getElementById('access-gate');
+      const app = document.getElementById('portfolio-app');
+
+      if (currentUserSession) {
+        // Site Unlocked
+        gate.classList.add('hidden');
+        app.classList.remove('locked-site');
+        renderUserInNavbar();
+      } else {
+        // Locked Behind Gatekeeper
+        gate.classList.remove('hidden');
+        app.classList.add('locked-site');
+      }
+    }
+
+    function switchGateTab(tab) {
+      const tabSignup = document.getElementById('gate-tab-signup');
+      const tabLogin = document.getElementById('gate-tab-login');
+      const formSignup = document.getElementById('gate-form-signup');
+      const formLogin = document.getElementById('gate-form-login');
+
+      hideGateFeedback();
+
+      if (tab === 'signup') {
+        tabSignup.className = 'py-2.5 rounded-lg bg-gold-500 text-black shadow-md transition-all';
+        tabLogin.className = 'py-2.5 rounded-lg text-zinc-400 hover:text-white transition-all';
+        formSignup.classList.remove('hidden');
+        formLogin.classList.add('hidden');
+      } else {
+        tabLogin.className = 'py-2.5 rounded-lg bg-gold-500 text-black shadow-md transition-all';
+        tabSignup.className = 'py-2.5 rounded-lg text-zinc-400 hover:text-white transition-all';
+        formLogin.classList.remove('hidden');
+        formSignup.classList.add('hidden');
+      }
+    }
+
+    function showGateError(msg) {
+      const errBox = document.getElementById('gate-error');
+      document.getElementById('gate-error-text').textContent = msg;
+      errBox.classList.remove('hidden');
+    }
+
+    function showGateSuccess(msg) {
+      const okBox = document.getElementById('gate-success');
+      document.getElementById('gate-success-text').textContent = msg;
+      okBox.classList.remove('hidden');
+    }
+
+    function hideGateFeedback() {
+      document.getElementById('gate-error').classList.add('hidden');
+      document.getElementById('gate-success').classList.add('hidden');
+    }
+
+    // =========================================================================
+    // 🌐 BACKEND CONNECTION (Google Apps Script)
+    // =========================================================================
+    const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbwZBtSEr8NA4_4te7gEN5wfMbExQiVyCJUkMne6APdofjMVtAg4EgabCNy8sRXEIhyR-g/exec';
+
+    async function callBackend(payload) {
+      const res = await fetch(BACKEND_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      return res.json();
+    }
+
+    function saveSession(user) {
+      currentUserSession = user;
+      try {
+        localStorage.setItem('lftd_active_user', JSON.stringify(user));
+      } catch (err) {}
+    }
+
+    // Handles Gatekeeper Sign Up
+    async function handleGateSignup(e) {
+      e.preventDefault();
+      hideGateFeedback();
+
+      const fullName = document.getElementById('gate-signup-name').value.trim();
+      const email = document.getElementById('gate-signup-email').value.trim().toLowerCase();
+      const interest = document.getElementById('gate-signup-interest').value;
+      const password = document.getElementById('gate-signup-password').value;
+
+      if (!fullName || !email || !password) {
+        showGateError('Please complete all required fields.');
+        return;
+      }
+
+      const btn = document.querySelector('#gate-form-signup button[type="submit"]');
+      const originalHTML = btn.innerHTML;
+      btn.disabled = true;
+      btn.textContent = 'Registering...';
+
+      try {
+        const result = await callBackend({ action: 'signup', fullName, email, interest, password });
+        if (!result.success) {
+          showGateError(result.error);
+          return;
+        }
+        saveSession(result.user);
+        showGateSuccess(`Welcome, ${fullName.split(' ')[0]}! Unlocking portfolio...`);
+        setTimeout(() => unlockWebsite(), 900);
+      } catch (err) {
+        showGateError('Server error: ' + err.message + ' (press F12 to see details)'); console.error('Backend error:', err);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+      }
+    }
+
+    // Handles Gatekeeper Log In
+    async function handleGateLogin(e) {
+      e.preventDefault();
+      hideGateFeedback();
+
+      const email = document.getElementById('gate-login-email').value.trim().toLowerCase();
+      const password = document.getElementById('gate-login-password').value;
+
+      const btn = document.querySelector('#gate-form-login button[type="submit"]');
+      const originalHTML = btn.innerHTML;
+      btn.disabled = true;
+      btn.textContent = 'Verifying...';
+
+      try {
+        const result = await callBackend({ action: 'login', email, password });
+        if (!result.success) {
+          showGateError(result.error);
+          return;
+        }
+        saveSession(result.user);
+        showGateSuccess(`Welcome back, ${result.user.fullName.split(' ')[0]}! Unlocking...`);
+        setTimeout(() => unlockWebsite(), 700);
+      } catch (err) {
+        showGateError('Server error: ' + err.message + ' (press F12 to see details)'); console.error('Backend error:', err);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+      }
+    }
+
+    function unlockWebsite() {
+      const gate = document.getElementById('access-gate');
+      const app = document.getElementById('portfolio-app');
+
+      gate.classList.add('opacity-0', 'scale-95');
+      setTimeout(() => {
+        gate.classList.add('hidden');
+        gate.classList.remove('opacity-0', 'scale-95');
+        app.classList.remove('locked-site');
+        renderUserInNavbar();
+      }, 400);
+    }
+
+    function lockAndLogout() {
+      currentUserSession = null;
+      try {
+        localStorage.removeItem('lftd_active_user');
+      } catch (e) {}
+
+      closeProfileModal();
+
+      const gate = document.getElementById('access-gate');
+      const app = document.getElementById('portfolio-app');
+      app.classList.add('locked-site');
+      gate.classList.remove('hidden');
+
+      // Clear gatekeeper input values
+      document.getElementById('gate-form-signup').reset();
+      document.getElementById('gate-form-login').reset();
+      hideGateFeedback();
+      switchGateTab('signup');
+    }
+
+    // Render Authenticated Collector in Header
+    function renderUserInNavbar() {
+      const navContainer = document.getElementById('nav-user-container');
+      const mobileQuick = document.getElementById('mobile-user-quick');
+      const mobileDrawer = document.getElementById('mobile-user-section');
+
+      if (!currentUserSession) {
+        navContainer.innerHTML = '';
+        mobileQuick.innerHTML = '';
+        mobileDrawer.innerHTML = '';
+        return;
+      }
+
+      const initials = getInitials(currentUserSession.fullName);
+      const firstName = currentUserSession.fullName.split(' ')[0];
+
+      // Desktop Button
+      navContainer.innerHTML = `
+        <button onclick="openProfileModal()" class="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 hover:border-gold-500 transition-all text-left">
+          <div class="w-6 h-6 rounded-full bg-gold-500 text-black font-bold text-[10px] flex items-center justify-center font-mono">
+            ${initials}
+          </div>
+          <span class="text-xs text-gold-300 font-medium tracking-normal">${firstName}</span>
+        </button>
+      `;
+
+      // Mobile Quick Icon
+      mobileQuick.innerHTML = `
+        <button onclick="openProfileModal()" class="w-8 h-8 rounded-full bg-gold-500 text-black font-bold text-xs flex items-center justify-center font-mono border border-gold-400">
+          ${initials}
+        </button>
+      `;
+
+      // Mobile Drawer Item
+      mobileDrawer.innerHTML = `
+        <div class="flex items-center justify-between">
+          <button onclick="openProfileModal()" class="text-xs uppercase tracking-widest text-gold-300 flex items-center gap-2">
+            <span>Collector Profile: ${firstName}</span>
+          </button>
+          <button onclick="lockAndLogout()" class="text-xs text-red-400 hover:underline">Sign Out</button>
+        </div>
+      `;
+    }
+
+    function openProfileModal() {
+      if (!currentUserSession) return;
+      document.getElementById('profile-display-name').textContent = currentUserSession.fullName;
+      document.getElementById('profile-display-email').textContent = currentUserSession.email;
+      document.getElementById('profile-display-interest').textContent = currentUserSession.interest || 'Fine Art';
+      document.getElementById('profile-avatar-initials').textContent = getInitials(currentUserSession.fullName);
+      document.getElementById('profile-modal').classList.remove('hidden');
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profile-modal').classList.add('hidden');
+    }
+
+    function getInitials(name) {
+      if (!name) return 'MH';
+      const parts = name.trim().split(' ');
+      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+      return name.slice(0, 2).toUpperCase();
+    }
+
+    // =========================================================================
+    // 🧭 SPA NAVIGATION
+    // =========================================================================
+    function navigateTo(pageId, categorySlug = null) {
+      currentActivePage = pageId;
+
+      document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
+      const targetPage = document.getElementById(`page-${pageId}`);
+      if (targetPage) targetPage.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-link').forEach(btn => {
+        if (btn.getAttribute('data-page') === pageId) {
+          btn.className = 'nav-link py-2 text-gold-300 font-semibold relative transition-colors hover:text-gold-400';
+        } else {
+          btn.className = 'nav-link py-2 text-zinc-400 relative transition-colors hover:text-white';
+        }
+      });
+
+      switch (pageId) {
+        case 'home':
+          document.title = `${PERSONAL_DETAILS.brandName} | Photography by ${PERSONAL_DETAILS.photographerName}`;
+          break;
+        case 'gallery':
+          document.title = `Photography Gallery | ${PERSONAL_DETAILS.brandName}`;
+          if (categorySlug) filterGallery(categorySlug);
+          break;
+        case 'about':
+          document.title = `About the Photographer | ${PERSONAL_DETAILS.brandName}`;
+          break;
+        case 'contact':
+          document.title = `Contact ${PERSONAL_DETAILS.photographerName} | ${PERSONAL_DETAILS.brandName}`;
+          break;
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (!mobileMenu.classList.contains('hidden')) {
+        toggleMobileMenu();
+      }
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const burger = document.getElementById('hamburger-icon');
+      const close = document.getElementById('close-icon');
+      menu.classList.toggle('hidden');
+      burger.classList.toggle('hidden');
+      close.classList.toggle('hidden');
+    }
+
+    // =========================================================================
+    // 🖼️ HOME & GALLERY RENDERING
+    // =========================================================================
+    function renderHomeFeatured() {
+      const container = document.getElementById('home-featured-grid');
+      const featured = IMAGE_ASSETS.galleryPhotos.filter(p => p.featured).slice(0, 6);
+
+      container.innerHTML = featured.map((photo, index) => `
+        <div onclick="openLightboxFromHome(${photo.id})" class="group relative overflow-hidden rounded-2xl bg-zinc-900 cursor-pointer border border-white/[0.08] hover:border-gold-500/60 transition-all duration-500 shadow-xl ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''}">
+          <div class="w-full ${index === 0 ? 'h-[28rem] md:h-[38rem]' : 'h-80'} overflow-hidden relative">
+            <img src="${photo.url}" alt="${photo.title}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-95 group-hover:brightness-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+            
+            <div class="absolute top-4 right-4 p-2.5 rounded-full bg-black/50 backdrop-blur-md text-white/80 opacity-0 group-hover:opacity-100 transition-opacity">
+              <svg class="w-4 h-4 text-gold-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 p-6 space-y-2 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+              <span class="text-[10px] uppercase tracking-[0.2em] text-gold-400 font-semibold block">${photo.category}</span>
+              <h3 class="font-serif text-lg sm:text-xl text-white font-normal leading-snug">${photo.title}</h3>
+              <p class="text-xs text-zinc-400 line-clamp-2 font-light">${photo.description}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderHomeCategories() {
+      const container = document.getElementById('home-categories-grid');
+      container.innerHTML = CATEGORIES.map(cat => `
+        <div onclick="navigateTo('gallery', '${cat.slug}')" class="group relative h-72 rounded-2xl overflow-hidden cursor-pointer border border-white/10 hover:border-gold-500/70 transition-all duration-500 shadow-lg">
+          <img src="${cat.image}" alt="${cat.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-90">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent"></div>
+          <div class="absolute inset-0 p-5 flex flex-col justify-between">
+            <span class="text-[10px] tracking-widest uppercase font-mono text-gold-300/80 px-2 py-0.5 rounded-full bg-black/40 backdrop-blur-sm self-start border border-white/10">
+              ${cat.count}
+            </span>
+            <div class="space-y-1">
+              <h3 class="font-serif text-lg text-white group-hover:text-gold-300 transition-colors leading-tight">${cat.name}</h3>
+              <span class="inline-flex items-center gap-1.5 text-xs text-gold-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span>View Collection</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderGalleryCategoryPills() {
+      const container = document.getElementById('gallery-category-pills');
+      const allPills = [{ name: 'All Photos', slug: 'all' }, ...CATEGORIES];
+
+      container.innerHTML = allPills.map(p => `
+        <button onclick="filterGallery('${p.slug}')" id="pill-${p.slug}" class="gallery-pill px-4 py-2 rounded-full text-xs uppercase tracking-wider font-medium transition-all duration-300 ${p.slug === 'all' ? 'bg-gold-500 text-black font-semibold scale-105 shadow-lg shadow-gold-500/20' : 'bg-white/[0.04] text-zinc-400 hover:text-white hover:bg-white/10 border border-white/[0.06]'}">
+          ${p.name}
+        </button>
+      `).join('');
+    }
+
+    function filterGallery(slug) {
+      currentGalleryCategory = slug;
+
+      document.querySelectorAll('.gallery-pill').forEach(btn => {
+        btn.className = 'gallery-pill px-4 py-2 rounded-full text-xs uppercase tracking-wider font-medium transition-all duration-300 bg-white/[0.04] text-zinc-400 hover:text-white hover:bg-white/10 border border-white/[0.06]';
+      });
+      const activePill = document.getElementById(`pill-${slug}`);
+      if (activePill) {
+        activePill.className = 'gallery-pill px-4 py-2 rounded-full text-xs uppercase tracking-wider font-medium transition-all duration-300 bg-gold-500 text-black font-semibold scale-105 shadow-lg shadow-gold-500/20';
+      }
+
+      const clearBtn = document.getElementById('gallery-clear-filter-btn');
+      if (slug !== 'all') {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+
+      renderGallery();
+    }
+
+    function handleSearch(val) {
+      currentSearchTerm = val.trim().toLowerCase();
+      const clearBtn = document.getElementById('gallery-search-clear');
+      if (currentSearchTerm) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+      renderGallery();
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('gallery-search');
+      input.value = '';
+      currentSearchTerm = '';
+      document.getElementById('gallery-search-clear').classList.add('hidden');
+      renderGallery();
+    }
+
+    function resetGalleryFilters() {
+      clearSearch();
+      filterGallery('all');
+    }
+
+    function getFilteredGalleryPhotos() {
+      return IMAGE_ASSETS.galleryPhotos.filter(item => {
+        const matchesCategory = currentGalleryCategory === 'all' || item.catSlug === currentGalleryCategory;
+        const matchesSearch = !currentSearchTerm || 
+          item.title.toLowerCase().includes(currentSearchTerm) ||
+          item.category.toLowerCase().includes(currentSearchTerm) ||
+          (item.tags && item.tags.some(t => t.toLowerCase().includes(currentSearchTerm)));
+        return matchesCategory && matchesSearch;
+      });
+    }
+
+    function renderGallery() {
+      const masonry = document.getElementById('gallery-masonry');
+      const counter = document.getElementById('gallery-counter');
+      const emptyState = document.getElementById('gallery-empty-state');
+
+      const items = getFilteredGalleryPhotos();
+      counter.textContent = items.length;
+
+      if (items.length === 0) {
+        masonry.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      masonry.innerHTML = items.map((photo, index) => `
+        <div onclick="openLightboxFromGallery(${index})" class="group relative break-inside-avoid rounded-2xl overflow-hidden bg-zinc-900 border border-white/10 hover:border-gold-500/70 cursor-pointer transition-all duration-500 shadow-xl">
+          <img src="${photo.url}" alt="${photo.title}" loading="lazy" class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-95 group-hover:brightness-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-6">
+            <div class="flex justify-between items-start">
+              <span class="text-[10px] tracking-widest uppercase font-mono px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-gold-300 border border-white/10">
+                ${photo.category}
+              </span>
+              <div class="p-2 rounded-full bg-black/60 backdrop-blur-md text-white">
+                <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+              </div>
+            </div>
+            <div class="space-y-1.5 transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300">
+              <h3 class="font-serif text-lg text-white font-normal">${photo.title}</h3>
+              <p class="text-xs text-zinc-300 font-light line-clamp-2">${photo.description}</p>
+              ${photo.exif ? `<span class="text-[10px] font-mono text-gold-400/80 block pt-1">${photo.exif}</span>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 🔍 LIGHTBOX DISPLAY
+    // =========================================================================
+    function openLightboxFromGallery(index) {
+      currentLightboxList = getFilteredGalleryPhotos();
+      currentLightboxIndex = index;
+      updateLightboxContent();
+      document.getElementById('lightbox-modal').classList.remove('hidden');
+    }
+
+    function openLightboxFromHome(photoId) {
+      currentLightboxList = IMAGE_ASSETS.galleryPhotos;
+      const idx = currentLightboxList.findIndex(p => p.id === photoId);
+      currentLightboxIndex = idx !== -1 ? idx : 0;
+      updateLightboxContent();
+      document.getElementById('lightbox-modal').classList.remove('hidden');
+    }
+
+    function updateLightboxContent() {
+      if (!currentLightboxList.length) return;
+      const photo = currentLightboxList[currentLightboxIndex];
+
+      document.getElementById('lb-image').src = photo.url;
+      document.getElementById('lb-counter').textContent = `${currentLightboxIndex + 1} / ${currentLightboxList.length}`;
+      document.getElementById('lb-category').textContent = photo.category;
+      document.getElementById('lb-title').textContent = photo.title;
+      document.getElementById('lb-desc').textContent = photo.description;
+      document.getElementById('lb-exif').textContent = photo.exif || '';
+    }
+
+    function nextLightboxImage() {
+      currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxList.length;
+      updateLightboxContent();
+    }
+
+    function prevLightboxImage() {
+      currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxList.length) % currentLightboxList.length;
+      updateLightboxContent();
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox-modal').classList.add('hidden');
+    }
+
+    function setupKeyboardListeners() {
+      window.addEventListener('keydown', (e) => {
+        const lb = document.getElementById('lightbox-modal');
+        if (!lb.classList.contains('hidden')) {
+          if (e.key === 'Escape') closeLightbox();
+          if (e.key === 'ArrowRight') nextLightboxImage();
+          if (e.key === 'ArrowLeft') prevLightboxImage();
+        }
+
+        const prof = document.getElementById('profile-modal');
+        if (!prof.classList.contains('hidden') && e.key === 'Escape') {
+          closeProfileModal();
+        }
+      });
+    }
+
+    // =========================================================================
+    // ✉️ CONTACT FORM
+    // =========================================================================
+    async function handleContactSubmit(e) {
+      e.preventDefault();
+      const errBox = document.getElementById('contact-error-box');
+      errBox.classList.add('hidden');
+
+      const name = document.getElementById('contact-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const subject = document.getElementById('contact-subject').value.trim();
+      const msg = document.getElementById('contact-message').value.trim();
+
+      if (!name || !email || !msg) {
+        document.getElementById('contact-error-msg').textContent = 'Please complete all required fields.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        document.getElementById('contact-error-msg').textContent = 'Please enter a valid email address.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      const btn = document.getElementById('contact-submit-btn');
+      const originalHTML = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `
+        <svg class="w-4 h-4 animate-spin text-black" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+        <span>Transmitting Message...</span>
+      `;
+
+      try {
+        const result = await callBackend({ action: 'contact', name, email, subject, message: msg });
+        if (!result.success) {
+          throw new Error(result.error);
+        }
+        document.getElementById('contact-form').classList.add('hidden');
+        document.getElementById('contact-success-box').classList.remove('hidden');
+      } catch (err) {
+        document.getElementById('contact-error-msg').textContent = err.message && err.message !== 'Failed to fetch'
+          ? err.message
+          : 'Could not send your message. Please try again.';
+        errBox.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+      }
+    }
+
+    function resetContactForm() {
+      document.getElementById('contact-form').reset();
+      document.getElementById('contact-form').classList.remove('hidden');
+      document.getElementById('contact-success-box').classList.add('hidden');
+    }
+
+    // =========================================================================
+    // ⬆️ SCROLL LISTENER
+    // =========================================================================
+    function setupScrollListener() {
+      const topBtn = document.getElementById('back-to-top');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) {
+          topBtn.classList.remove('hidden');
+        } else {
+          topBtn.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
